@@ -13,6 +13,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using aspnet5_base_ef.Models;
+using aspnet5_base_ef.Services;
+using aspnet5_base_ef.Repositories;
 
 namespace aspnet5_base_ef
 {
@@ -29,7 +31,13 @@ namespace aspnet5_base_ef
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
+            services.AddAutoMapper(typeof(Startup));
+            // DI Services
+            services.AddScoped<ITodoItemsService, TodoItemsService>();
+            services.AddScoped<ITodoItemsRepository, TodoItemsRepository>();
+
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "aspnet5_base_ef", Version = "v1" });

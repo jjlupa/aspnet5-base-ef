@@ -9,6 +9,6 @@ namespace aspnet5_base_ef.Models
         {
         }
 
-        public DbSet<TodoItem> TodoItems { get; set; }
+        public DbSet<TodoItem> TodoItems => Set<TodoItem>(); // fixes nullable type warning, EF will sort it.
     }
 }

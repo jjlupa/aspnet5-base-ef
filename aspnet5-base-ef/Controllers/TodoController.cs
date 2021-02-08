@@ -2,115 +2,95 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using aspnet5_base_ef.Models;
+using aspnet5_base_ef.DTOs;
+using aspnet5_base_ef.Services;
 
 namespace aspnet5_base_ef.Controllers
 {
-    #region TodoController
     [Route("api/[controller]")]
     [ApiController]
     public class TodoItemsController : ControllerBase
     {
-        private readonly TodoContext _context;
-
-        public TodoItemsController(TodoContext context)
+        private readonly ITodoItemsService _service;
+        public TodoItemsController(ITodoItemsService service)
         {
-            _context = context;
+            _service = service;
         }
-        #endregion
 
         // GET: api/TodoItems
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
+        public async Task<ActionResult<IEnumerable<TodoItemDTOv1>>> GetTodoItems()
         {
-            return await _context.TodoItems.ToListAsync();
+            return Ok(await _service.GetTodoItems());
         }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TodoItem>> GetTodoItem(long id)
+        public async Task<ActionResult<TodoItemDTOv1>> GetTodoItem(Guid id)
         {
-            var todoItem = await _context.TodoItems.FindAsync(id);
-
-            if (todoItem == null)
+            var item = await _service.GetTodoItem(id);
+            if (item == null)
             {
                 return NotFound();
             }
-
-            return todoItem;
+            return Ok(item);
         }
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        #region snippet_Update
         // PUT: api/TodoItems/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoItem(long id, TodoItem todoItem)
+        public async Task<IActionResult> PutTodoItem(Guid id, TodoItemDTOv1 todoItem)
         {
             if (id != todoItem.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(todoItem).State = EntityState.Modified;
+            bool success = await _service.ChangeTodoItem(todoItem);
 
-            try
+            if (success)
             {
-                await _context.SaveChangesAsync();
+                return NoContent();
             }
-            catch (DbUpdateConcurrencyException)
+            else if (_service.GetTodoItem(id) is null)
             {
-                if (!TodoItemExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
-
-            return NoContent();
+            else
+            {
+                // Couldn't change, still there, something weird.
+                return BadRequest();
+            }
         }
-        #endregion
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        #region snippet_Create
         // POST: api/TodoItems
         [HttpPost]
-        public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem todoItem)
+        public async Task<ActionResult<TodoItemDTOv1>> PostTodoItem(TodoItemDTOv1 todoItem)
         {
-            _context.TodoItems.Add(todoItem);
-            await _context.SaveChangesAsync();
-
-            //return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
-            return CreatedAtAction(nameof(GetTodoItem), new { id = todoItem.Id }, todoItem);
+            TodoItemDTOv1? created = await _service.CreateTodoItem(todoItem);
+            if (created != null)
+            {
+                return CreatedAtAction(nameof(GetTodoItem), new { id = created.Id }, created);
+            }
+            else
+                return BadRequest(); // gotta be a low level validation fail
         }
-        #endregion
 
-        #region snippet_Delete
         // DELETE: api/TodoItems/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTodoItem(long id)
+        public async Task<IActionResult> DeleteTodoItem(Guid id)
         {
-            var todoItem = await _context.TodoItems.FindAsync(id);
-            if (todoItem == null)
+            if (await _service.GetTodoItem(id) is null)
             {
                 return NotFound();
             }
 
-            _context.TodoItems.Remove(todoItem);
-            await _context.SaveChangesAsync();
-
+            bool success = await _service.DeleteTodoItem(id);
+            System.Diagnostics.Debug.Assert(success); // If there is a way for this to be false, what do I return?
             return NoContent();
-        }
-        #endregion
-
-        private bool TodoItemExists(long id)
-        {
-            return _context.TodoItems.Any(e => e.Id == id);
         }
     }
 }
