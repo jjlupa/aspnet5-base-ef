@@ -42,12 +42,8 @@ namespace aspnet5_base_ef.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TodoItemDTOv1>> GetTodoItem(Guid id)
         {
-            var item = await _service.GetTodoItem(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            return Ok(item);
+            TodoItemDTOv1? item = await _service.GetTodoItem(id);
+            return item == null ? NotFound() : (ActionResult<TodoItemDTOv1>)Ok(item);
         }
 
         /// <summary>
@@ -76,7 +72,7 @@ namespace aspnet5_base_ef.Controllers
             {
                 return NoContent();
             }
-            else if (_service.GetTodoItem(id) is null)
+            else if (await _service.GetTodoItem(id) is null)
             {
                 return NotFound();
             }
@@ -105,7 +101,9 @@ namespace aspnet5_base_ef.Controllers
                 return CreatedAtAction(nameof(GetTodoItem), new { id = created.Id }, created);
             }
             else
+            {
                 return BadRequest(); // gotta be a low level validation fail
+            }
         }
 
         /// <summary>

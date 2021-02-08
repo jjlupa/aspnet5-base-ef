@@ -38,11 +38,16 @@ feel that's a bit much to start with.  Anyways, we'll just go with that and see 
 * Unwind Controller code down to the repository.
 * Dress up the swagger, make sure to fix the XML in the csproj
     * https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-5.0&tabs=visual-studio-code
-
+* Unit Tests!
+    * `dotnet new xunit -o aspnet5-base-ef.UnitTests`
+    * `dotnet add ./aspnet5-base-ef.UnitTests/aspnet5-base-ef.UnitTests.csproj reference ./aspnet5-base-ef/aspnet5-base-ef.csproj `
+    * cd unit test dir
+    * `dotnet add package Microsoft.AspNetCore.Mvc.Testing`
+    * About this time I added an SLN because VS is better than Code at handling tests imo. https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-sln if you live and die by command line.
+    * Create TodoController.Tests.cs read comments in that file for detail
 
 # Next Steps
 
-* Unit Tests
 * Integration Tests
 * Logging
 

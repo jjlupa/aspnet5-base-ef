@@ -5,7 +5,7 @@ using aspnet5_base_ef.Models;
 
 namespace aspnet5_base_ef.Profiles
 {
-    class TodoProfile : Profile
+    public class TodoProfile : Profile
     {
         public TodoProfile()
         {

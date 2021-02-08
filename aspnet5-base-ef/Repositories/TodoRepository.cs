@@ -20,7 +20,7 @@ namespace aspnet5_base_ef.Repositories
         }
         public async Task<TodoItem?> GetTodoItem(Guid id)
         {
-            var todoItem = await _context.TodoItems.FindAsync(id);
+            TodoItem? todoItem = await _context.TodoItems.FindAsync(id);
             return todoItem;
         }
         public async Task<TodoItem?> CreateTodoItem(TodoItem item)
@@ -56,9 +56,11 @@ namespace aspnet5_base_ef.Repositories
         }
         public async Task<bool> DeleteTodoItem(Guid id)
         {
-            var todoItem = await _context.TodoItems.FindAsync(id);
+            TodoItem? todoItem = await _context.TodoItems.FindAsync(id);
             if (todoItem == null)
+            {
                 return false;
+            }
 
             _context.TodoItems.Remove(todoItem);
             await _context.SaveChangesAsync();

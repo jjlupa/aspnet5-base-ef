@@ -1,11 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using aspnet5_base_ef.Models;
 using aspnet5_base_ef.DTOs;
 
 namespace aspnet5_base_ef.Services
