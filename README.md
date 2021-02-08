@@ -16,8 +16,32 @@ When spiking out random things, I find myself needing starting projects slightly
 * Just Copy/Paste the stupid controller instead, we've already done the rest of the wiring.
 * So far so good, you can ignore the rest of that tutorial since it just goes over postman which doesn't add material value over swagger, imo.
 
+# Unit Tests
+
+OK, let's talk about repository stack, or layered architecture. Breaking up your layers helps to drive unit tests. There are acouple
+ways to go about this, but I'm going to go full repository pattern, so each controller would be backed by a service, and aservice would
+be backed by one or more repositories.  You could push multiple services against a controller for hybrid behaviors, but I generally
+feel that's a bit much to start with.  Anyways, we'll just go with that and see how it feels.  For this to work, you really want your unit tests to map to business logic, and not framework code.  Don't shoot for 100% coverage, shoot to cover what you need.
+
+* Delete Weather controller/model.
+* Add CreatedAt, DeletedAt to the ToDo item model, change Id to Guid, because we aren't monsters.
+    * We are adding soft deletes as an idea because it allows us to add business logic to get/put/post which we can unit test.
+* Annotate the model with the appropriate EF stuff.
+* Add Repositories, Services, and DTOs folders, transform the controller methods into call chains through the layers.
+* Add a DTO that maps the model, without the CreatedAt, so we can show differentiated DTO and entities.
+* Add Automapper
+    * `dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection`
+    * Add Automapper Startup in Startup.cs
+    * Add Profiles folder
+    * Add TodoItemProfile.cs to Profiles folder.
+* Add Serivce and Repository to DI in Startup.cs
+* Unwind Controller code down to the repository.
+
+
 # Next Steps
 
+* Unit Tests
+* Clean Up Swagger
+* Integration Tests
 * Logging
-* Testing
 
