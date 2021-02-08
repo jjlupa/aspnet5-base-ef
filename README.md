@@ -36,12 +36,13 @@ feel that's a bit much to start with.  Anyways, we'll just go with that and see 
     * Add TodoItemProfile.cs to Profiles folder.
 * Add Serivce and Repository to DI in Startup.cs
 * Unwind Controller code down to the repository.
+* Dress up the swagger, make sure to fix the XML in the csproj
+    * https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-5.0&tabs=visual-studio-code
 
 
 # Next Steps
 
 * Unit Tests
-* Clean Up Swagger
 * Integration Tests
 * Logging
 

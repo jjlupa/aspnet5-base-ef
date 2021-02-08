@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
     <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn><!-- Turning on XML comments makes this warning a pain in the ass -->
   </PropertyGroup>
 
   <ItemGroup>

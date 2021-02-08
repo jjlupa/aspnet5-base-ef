@@ -15,6 +15,8 @@ using Microsoft.EntityFrameworkCore;
 using aspnet5_base_ef.Models;
 using aspnet5_base_ef.Services;
 using aspnet5_base_ef.Repositories;
+using System.Reflection;
+using System.IO;
 
 namespace aspnet5_base_ef
 {
@@ -40,7 +42,10 @@ namespace aspnet5_base_ef
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "aspnet5_base_ef", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TodoList API", Version = "v1" });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
         }
 
@@ -51,7 +56,7 @@ namespace aspnet5_base_ef
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "aspnet5_base_ef v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ToDo API v1"));
             }
 
             app.UseHttpsRedirection();
