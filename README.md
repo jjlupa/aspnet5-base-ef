@@ -45,6 +45,8 @@ feel that's a bit much to start with.  Anyways, we'll just go with that and see 
     * `dotnet add package Microsoft.AspNetCore.Mvc.Testing`
     * About this time I added an SLN because VS is better than Code at handling tests imo. https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-sln if you live and die by command line.
     * Create TodoController.Tests.cs read comments in that file for detail
+    * Create TodoService.Tests.cs read comments in that file for detail
+    * Create TodoRepository.Tests.cs read comments in that file for detail
 
 # Next Steps
 
