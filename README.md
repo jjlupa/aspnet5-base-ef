@@ -50,9 +50,14 @@ feel that's a bit much to start with.  Anyways, we'll just go with that and see 
 * Integration Tests
     * `dotnet new xunit -o aspnet5-base-ef.IntegrationTests`
     * `dotnet sln add aspnet5-base-ef.IntegrationTests/aspnet5-base-ef.IntegrationTests.csproj`
-    
+* Serilog
 
-# Next Steps
-
-* Logging
+```dotnet add package Serilog
+dotnet add package Serilog.AspNetCore
+dotnet add package Serilog.Enrichers.Environment
+dotnet add package Serilog.Exceptions
+dotnet add package Serilog.Extensions.Logging
+dotnet add package Serilog.Settings.Configuration
+dotnet add package Serilog.Sinks.Async
+dotnet add package Serilog.Sinks.Console```
 

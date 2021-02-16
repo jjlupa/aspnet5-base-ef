@@ -11,6 +11,7 @@ using aspnet5_base_ef.Services;
 using aspnet5_base_ef.Repositories;
 using System.Reflection;
 using System.IO;
+using Serilog;
 
 namespace aspnet5_base_ef
 {
@@ -52,6 +53,8 @@ namespace aspnet5_base_ef
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ToDo API v1"));
             }
+
+            app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
 

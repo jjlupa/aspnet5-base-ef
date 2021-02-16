@@ -6,6 +6,7 @@ using aspnet5_base_ef.Controllers;
 using aspnet5_base_ef.Services;
 using Microsoft.AspNetCore.Mvc;
 using aspnet5_base_ef.DTOs;
+using Microsoft.Extensions.Logging;
 
 namespace aspnet5_base_ef.UnitTests
 {
@@ -21,12 +22,19 @@ namespace aspnet5_base_ef.UnitTests
 
     public class TodoControllerTests
     {
+        private readonly ILogger<TodoItemsController> _logger;
+        public TodoControllerTests()
+        {
+
+            _logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger<TodoItemsController>();
+        }
+
         [Fact]
         public async Task GetTodoItem_Null_ReturnsNotFound()
         {
             // Arrange
             var mockService = new Mock<ITodoItemsService>(); //literally doesn't matter for this
-            var controller = new TodoItemsController(mockService.Object);
+            var controller = new TodoItemsController(mockService.Object, _logger);
 
             Guid id = Guid.NewGuid();
 
@@ -53,7 +61,7 @@ namespace aspnet5_base_ef.UnitTests
             mockService.Setup(repo => repo.GetTodoItem(id))
                 .ReturnsAsync(todoItemDTOv1);
 
-            var controller = new TodoItemsController(mockService.Object);
+            var controller = new TodoItemsController(mockService.Object, _logger);
 
             // Act
             var result = await controller.GetTodoItem(id);
@@ -75,7 +83,7 @@ namespace aspnet5_base_ef.UnitTests
             };
 
             var mockService = new Mock<ITodoItemsService>();
-            var controller = new TodoItemsController(mockService.Object);
+            var controller = new TodoItemsController(mockService.Object, _logger);
 
             // Act
             var result = await controller.PutTodoItem(id, todoItemDTOv1);
@@ -100,7 +108,7 @@ namespace aspnet5_base_ef.UnitTests
             mockService.Setup(repo => repo.ChangeTodoItem(item))
                 .ReturnsAsync(true);
 
-            var controller = new TodoItemsController(mockService.Object);
+            var controller = new TodoItemsController(mockService.Object, _logger);
 
             // Act
             var result = await controller.PutTodoItem(id, item);
@@ -128,7 +136,7 @@ namespace aspnet5_base_ef.UnitTests
             mockService.Setup(repo => repo.GetTodoItem(id))
                 .ReturnsAsync((TodoItemDTOv1)null);
 
-            var controller = new TodoItemsController(mockService.Object);
+            var controller = new TodoItemsController(mockService.Object, _logger);
 
             // Act
             var result = await controller.PutTodoItem(id, item);
@@ -156,7 +164,7 @@ namespace aspnet5_base_ef.UnitTests
             mockService.Setup(repo => repo.GetTodoItem(id))
                 .ReturnsAsync(item);
 
-            var controller = new TodoItemsController(mockService.Object);
+            var controller = new TodoItemsController(mockService.Object, _logger);
 
             // Act
             var result = await controller.PutTodoItem(id, item);
@@ -181,7 +189,7 @@ namespace aspnet5_base_ef.UnitTests
             mockService.Setup(repo => repo.CreateTodoItem(item))
                 .ReturnsAsync(item);
 
-            var controller = new TodoItemsController(mockService.Object);
+            var controller = new TodoItemsController(mockService.Object, _logger);
 
             // Act
             var result = await controller.PostTodoItem(item);
@@ -206,7 +214,7 @@ namespace aspnet5_base_ef.UnitTests
             mockService.Setup(repo => repo.CreateTodoItem(item))
                 .ReturnsAsync((TodoItemDTOv1)null);
 
-            var controller = new TodoItemsController(mockService.Object);
+            var controller = new TodoItemsController(mockService.Object, _logger);
 
             // Act
             var result = await controller.PostTodoItem(item);
@@ -233,7 +241,7 @@ namespace aspnet5_base_ef.UnitTests
             mockService.Setup(repo => repo.GetTodoItem(id))
                 .ReturnsAsync(item);
 
-            var controller = new TodoItemsController(mockService.Object);
+            var controller = new TodoItemsController(mockService.Object, _logger);
 
             // Act
             var result = await controller.DeleteTodoItem(id);
@@ -260,7 +268,7 @@ namespace aspnet5_base_ef.UnitTests
             mockService.Setup(repo => repo.GetTodoItem(id))
                 .ReturnsAsync((TodoItemDTOv1)null);
 
-            var controller = new TodoItemsController(mockService.Object);
+            var controller = new TodoItemsController(mockService.Object, _logger);
 
             // Act
             var result = await controller.DeleteTodoItem(id);

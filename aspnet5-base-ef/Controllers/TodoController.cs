@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using aspnet5_base_ef.DTOs;
 using aspnet5_base_ef.Services;
+using Microsoft.Extensions.Logging;
 
 namespace aspnet5_base_ef.Controllers
 {
@@ -13,9 +14,11 @@ namespace aspnet5_base_ef.Controllers
     public class TodoItemsController : ControllerBase
     {
         private readonly ITodoItemsService _service;
-        public TodoItemsController(ITodoItemsService service)
+        private readonly ILogger<TodoItemsController> _logger;
+        public TodoItemsController(ITodoItemsService service, ILogger<TodoItemsController> logger)
         {
             _service = service;
+            _logger = logger;
         }
 
         /// <summary>
@@ -63,6 +66,7 @@ namespace aspnet5_base_ef.Controllers
         {
             if (id != item.Id)
             {
+                _logger.LogInformation("ID Mismatch");
                 return BadRequest();
             }
 
@@ -70,15 +74,18 @@ namespace aspnet5_base_ef.Controllers
 
             if (success)
             {
+                _logger.LogInformation("Put Successful");
                 return NoContent();
             }
             else if (await _service.GetTodoItem(id) is null)
             {
+                _logger.LogInformation("Couldn't find record");
                 return NotFound();
             }
             else
             {
                 // Couldn't change, still there, something weird.
+                _logger.LogWarning("Investigate!");
                 return BadRequest();
             }
         }
@@ -98,6 +105,7 @@ namespace aspnet5_base_ef.Controllers
             TodoItemDTOv1? created = await _service.CreateTodoItem(item);
             if (created != null)
             {
+                _logger.LogInformation("Created Todo Item {TodoItemDTOv1}", created);
                 return CreatedAtAction(nameof(GetTodoItem), new { id = created.Id }, created);
             }
             else
