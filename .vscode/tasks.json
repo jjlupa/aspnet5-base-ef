@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/aspnet5-base-ef/aspnet5-base-ef.csproj",
+                "${workspaceFolder}/aspnet5-base-ef.sln",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/aspnet5-base-ef/aspnet5-base-ef.csproj",
+                "${workspaceFolder}/aspnet5-base-ef.sln",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],

@@ -47,9 +47,12 @@ feel that's a bit much to start with.  Anyways, we'll just go with that and see 
     * Create TodoController.Tests.cs read comments in that file for detail
     * Create TodoService.Tests.cs read comments in that file for detail
     * Create TodoRepository.Tests.cs read comments in that file for detail
+* Integration Tests
+    * `dotnet new xunit -o aspnet5-base-ef.IntegrationTests`
+    * `dotnet sln add aspnet5-base-ef.IntegrationTests/aspnet5-base-ef.IntegrationTests.csproj`
+    
 
 # Next Steps
 
-* Integration Tests
 * Logging
 
